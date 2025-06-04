@@ -1,0 +1,319 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container-fluid px-0 about-page">
+    <!-- Hero Section with Background -->
+    <div class="hero-section">
+        <div class="container h-100 d-flex align-items-center">
+            <div class="hero-content text-center text-white w-100 py-5">
+                <h1 class="hero-title">{{ student.name }}</h1>
+                <h2 class="hero-subtitle">{{ student.program }}</h2>
+            </div>
+        </div>
+    </div>
+
+    <!-- Student Profile Section -->
+    <div class="container py-5 profile-section">
+        <div class="row align-items-center">
+            <div class="col-lg-4 mb-4 mb-lg-0">
+                <div class="profile-card text-center p-4">
+                    <img src="{{ student.photo.url }}" alt="Фото {{ student.name }}" class="profile-image">
+                    <div class="contact-info">
+                        <p><i class="fas fa-envelope"></i> {{ student.email }}</p>
+                        <p><i class="fas fa-phone"></i> {{ student.phone }}</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-8">
+                <div class="program-info p-5">
+                    <h3 class="program-title">Моя образовательная программа</h3>
+                    <div class="program-description">
+                        <p>{{ student.program_description }}</p>
+                    </div>
+                    <div class="progress-container">
+                        <div class="progress">
+                            <div class="progress-bar" role="progressbar" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100"></div>
+                        </div>
+                        <p class="progress-text">Прогресс обучения: 75%</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Search and Filter Section -->
+    <div class="search-section">
+        <div class="container">
+            <form method="get" class="search-form">
+                <div class="row g-3 align-items-center">
+                    <div class="col-md-8">
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="fas fa-search"></i></span>
+                            <input type="text" name="name" class="form-control" placeholder="Поиск по имени..." value="{{ filters.name }}">
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <select name="sort" class="form-select">
+                            <option value="">Сортировка...</option>
+                            <option value="name" {% if filters.sort == 'name' %}selected{% endif %}>По имени (А-Я)</option>
+                            <option value="-name" {% if filters.sort == '-name' %}selected{% endif %}>По имени (Я-А)</option>
+                        </select>
+                    </div>
+                    <div class="col-md-1">
+                        <button type="submit" class="btn filter-btn">
+                            <i class="fas fa-filter"></i>
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Teachers Section -->
+    <div class="container py-5 teachers-section">
+        <h2 class="section-title">Наши преподаватели</h2>
+        <div class="row g-4">
+            {% for teacher in teachers %}
+            <div class="col-lg-4 col-md-6">
+                <div class="teacher-card">
+                    <div class="teacher-photo">
+                        <img src="{{ teacher.photo.url }}" alt="Фото {{ teacher.name }}" class="teacher-image">
+                    </div>
+                    <h4>{{ teacher.name }}</h4>
+                    <p class="teacher-email"><i class="fas fa-envelope"></i>{{ teacher.email }}</p>
+                    <div class="subjects-badge">
+                        <span class="badge">{{ teacher.subjects }}</span>
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            <div class="col-12">
+                <div class="alert alert-info no-teachers">
+                    <i class="fas fa-info-circle"></i>
+                    <h4>Преподаватели не найдены</h4>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- Classmates Section -->
+    <div class="classmates-section">
+        <div class="container">
+            <h2 class="section-title">Мои сокурсники</h2>
+            <div class="row g-4">
+                {% for classmate in classmates %}
+                <div class="col-xl-3 col-lg-4 col-md-6">
+                    <div class="classmate-card">
+                        <div class="classmate-photo">
+                            <img src="{{ classmate.photo.url }}" alt="Фото {{ classmate.name }}" class="classmate-image">
+                        </div>
+                        <h5>{{ classmate.name }}</h5>
+                        <p class="classmate-email"><i class="fas fa-envelope"></i>{{ classmate.email }}</p>
+                        <p class="classmate-phone"><i class="fas fa-phone"></i>{{ classmate.phone }}</p>
+                    </div>
+                </div>
+                {% empty %}
+                <div class="col-12">
+                    <div class="alert alert-info no-classmates">
+                        <i class="fas fa-users"></i>
+                        <h4>Сокурсники не найдены</h4>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Add Font Awesome for icons -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+<style>
+    /* Color Variables */
+    :root {
+        --primary-color: #8bd3dd;
+        --dark-color: #2b2d42;
+        --light-color: #f0f5f9;
+        --white: #ffffff;
+    }
+
+    /* Base Styles */
+    body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        color: var(--dark-color);
+        background-color: var(--white);
+    }
+
+    /* Hero Section */
+    .hero-section {
+        background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('{% static "education-bg.jpg" %}') no-repeat center center;
+        background-size: cover;
+        min-height: 400px;
+    }
+
+    .hero-title {
+        font-size: 3rem;
+        font-weight: 700;
+        margin-bottom: 1rem;
+    }
+
+    .hero-subtitle {
+        font-size: 1.75rem;
+        color: var(--primary-color);
+    }
+
+    /* Profile Section */
+    .profile-section {
+        background-color: var(--white);
+    }
+
+    .profile-card {
+        background-color: var(--light-color);
+        border: 3px solid var(--primary-color);
+        border-radius: 1rem;
+    }
+
+    .profile-image {
+        width: 200px;
+        height: 200px;
+        object-fit: cover;
+        border-radius: 50%;
+        border: 3px solid var(--white);
+        margin-bottom: 1.5rem;
+    }
+
+    /* Program Info */
+    .program-info {
+        background-color: var(--white);
+        border-radius: 1rem;
+        box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.1);
+    }
+
+    .program-title {
+        color: var(--dark-color);
+        margin-bottom: 1.5rem;
+    }
+
+    /* Progress Bar */
+    .progress {
+        height: 10px;
+        background-color: #e2e2e2;
+    }
+
+    .progress-bar {
+        background-color: var(--primary-color);
+        width: 75%;
+    }
+
+    /* Search Section */
+    .search-section {
+        background-color: var(--dark-color);
+        padding: 1.5rem 0;
+    }
+
+    .search-form .form-control,
+    .search-form .form-select {
+        border: none;
+        height: 3rem;
+    }
+
+    .filter-btn {
+        background-color: var(--primary-color);
+        color: var(--white);
+        border: none;
+        height: 3rem;
+        width: 100%;
+    }
+
+    /* Teachers Section */
+    .teachers-section {
+        background-color: var(--white);
+    }
+
+    .teacher-card {
+        background-color: var(--white);
+        border-top: 4px solid var(--primary-color);
+        border-radius: 1rem;
+        padding: 1.5rem;
+        transition: all 0.3s ease;
+    }
+
+    .teacher-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+    }
+
+    .teacher-image {
+        width: 150px;
+        height: 150px;
+        object-fit: cover;
+        border-radius: 50%;
+        border: 3px solid var(--light-color);
+        margin-bottom: 1rem;
+    }
+
+    /* Classmates Section */
+    .classmates-section {
+        background-color: var(--light-color);
+        padding: 3rem 0;
+    }
+
+    .classmate-card {
+        background-color: var(--white);
+        border-radius: 1rem;
+        padding: 1.5rem;
+        transition: all 0.3s ease;
+    }
+
+    .classmate-image {
+        width: 120px;
+        height: 120px;
+        object-fit: cover;
+        border-radius: 50%;
+        border: 3px solid var(--primary-color);
+        margin-bottom: 1rem;
+    }
+
+    .add-btn {
+        background-color: var(--primary-color);
+        color: var(--white);
+        margin-top: 1rem;
+    }
+
+    /* Section Titles */
+    .section-title {
+        position: relative;
+        padding-bottom: 15px;
+        margin-bottom: 3rem;
+        text-align: center;
+    }
+
+    .section-title:after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 80px;
+        height: 3px;
+        background-color: var(--primary-color);
+    }
+
+    /* Responsive Adjustments */
+    @media (max-width: 768px) {
+        .hero-section {
+            min-height: 300px;
+        }
+        
+        .hero-title {
+            font-size: 2.2rem;
+        }
+        
+        .hero-subtitle {
+            font-size: 1.4rem;
+        }
+    }
+</style>
+{% endblock %}

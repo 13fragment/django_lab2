@@ -1,0 +1,21 @@
+.card-img-top {
+    object-fit: cover;
+    width: 250px;
+    height: 400px;
+}
+
+.nav-link{
+    color:#ac1a39;
+    font-size: calc(6.5px + 15 * (100vw / 1280));
+    font-weight: 500;
+    position: relative;
+}
+.nav-link:hover{
+    color:#530113;
+}
+.navbar-nav .nav-link.active{
+    color:#530113;
+    font-weight: bold;
+}
+
+
